@@ -1,6 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import SkillsManager from "./SkillsManager";
+import type { Project } from "../../types";
 
 const ADMIN_PASSWORD = "amoladmin123"; // Change this to your secure password
 
@@ -23,7 +24,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [error, setError] = useState("");
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [form, setForm] = useState(emptyProject());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -52,11 +53,11 @@ export default function AdminPage() {
     }
   }
 
-  function handleChange(e: any) {
+  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  async function handleAddOrEdit(e: React.FormEvent) {
+  async function handleAddOrEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!form.title || !form.description) return;
     if (editingId) {
@@ -79,7 +80,7 @@ export default function AdminPage() {
     fetchProjects();
   }
 
-  function handleEdit(project: any) {
+  function handleEdit(project: Project) {
     setForm(project);
     setEditingId(project.id);
   }

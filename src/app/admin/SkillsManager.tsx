@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import type { Skill } from "../../types";
 
 const CATEGORIES = ["Frontend", "Backend & Tools", "Certifications", "Other"];
 const PROFICIENCIES = ["Beginner", "Intermediate", "Proficient", "Advanced", "Expert"];
@@ -18,7 +19,7 @@ function emptySkill() {
 }
 
 export default function SkillsManager() {
-  const [skills, setSkills] = useState<any[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
   const [form, setForm] = useState(emptySkill());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -35,15 +36,15 @@ export default function SkillsManager() {
     setLoading(false);
   }
 
-  function handleChange(e: any) {
+  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function handleSlider(e: any) {
+  function handleSlider(e: ChangeEvent<HTMLInputElement>) {
     setForm({ ...form, level: Number(e.target.value) });
   }
 
-  async function handleAddOrEdit(e: any) {
+  async function handleAddOrEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!form.name) return;
     if (editingId) {
@@ -64,7 +65,7 @@ export default function SkillsManager() {
     fetchSkills();
   }
 
-  function handleEdit(skill: any) {
+  function handleEdit(skill: Skill) {
     setForm(skill);
     setEditingId(skill.id);
   }
@@ -106,7 +107,7 @@ export default function SkillsManager() {
     fetchSkills();
   }
 
-  async function handleToggleVisible(skill: any) {
+  async function handleToggleVisible(skill: Skill) {
     await fetch("/api/skills", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },

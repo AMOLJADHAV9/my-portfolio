@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import type { Skill } from "../../../types";
 
 const DATA_PATH = path.join(process.cwd(), 'src/data/skills.json');
 
@@ -9,7 +10,7 @@ function readSkills() {
   return JSON.parse(data);
 }
 
-function writeSkills(skills: any[]) {
+function writeSkills(skills: Skill[]) {
   fs.writeFileSync(DATA_PATH, JSON.stringify(skills, null, 2));
 }
 
@@ -56,7 +57,7 @@ export async function DELETE(req: NextRequest) {
   const { id } = await req.json();
   let skills = readSkills();
   const initialLength = skills.length;
-  skills = skills.filter((s: any) => s.id !== id);
+  skills = skills.filter((s: Skill) => s.id !== id);
   if (skills.length !== initialLength) {
     writeSkills(skills);
     return NextResponse.json({ success: true });

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import type { Project } from "../../../types";
 
 const DATA_PATH = path.join(process.cwd(), 'src/data/projects.json');
 
@@ -9,7 +10,7 @@ function readProjects() {
   return JSON.parse(data);
 }
 
-function writeProjects(projects: any[]) {
+function writeProjects(projects: Project[]) {
   fs.writeFileSync(DATA_PATH, JSON.stringify(projects, null, 2));
 }
 
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const body = await req.json();
   const projects = readProjects();
-  const idx = projects.findIndex((p: any) => p.id === body.id);
+  const idx = projects.findIndex((p: Project) => p.id === body.id);
   if (idx !== -1) {
     projects[idx] = {
       ...projects[idx],
@@ -59,7 +60,7 @@ export async function DELETE(req: NextRequest) {
   const { id } = await req.json();
   let projects = readProjects();
   const initialLength = projects.length;
-  projects = projects.filter((p: any) => p.id !== id);
+  projects = projects.filter((p: Project) => p.id !== id);
   if (projects.length !== initialLength) {
     writeProjects(projects);
     return NextResponse.json({ success: true });

@@ -1,8 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
+import type { Resume } from "../../types";
 
 export default function ResumeManager({ password }: { password: string }) {
-  const [resume, setResume] = useState<any>(null);
+  const [resume, setResume] = useState<Resume | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -16,36 +17,47 @@ export default function ResumeManager({ password }: { password: string }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleChange = (field: string, value: any) => {
-    setResume((prev: any) => ({ ...prev, [field]: value }));
+  const handleChange = (field: keyof Resume, value: string | string[] | Resume["contact"] | Resume["education"] | Resume["experience"] | Resume["certifications"]) => {
+    setResume((prev) => prev ? { ...prev, [field]: value } : prev);
   };
 
-  const handleContactChange = (field: string, value: any) => {
-    setResume((prev: any) => ({ ...prev, contact: { ...prev.contact, [field]: value } }));
+  const handleContactChange = (field: keyof Resume["contact"], value: string) => {
+    setResume((prev) => prev ? { ...prev, contact: { ...prev.contact, [field]: value } } : prev);
   };
 
-  const handleArrayChange = (field: string, idx: number, subfield: string, value: any) => {
-    setResume((prev: any) => {
-      const arr = [...prev[field]];
+  const handleArrayChange = (
+    field: "education" | "experience",
+    idx: number,
+    subfield: string,
+    value: string
+  ) => {
+    setResume((prev) => {
+      if (!prev) return prev;
+      const arr = [...(prev[field] as any[])];
       arr[idx] = { ...arr[idx], [subfield]: value };
       return { ...prev, [field]: arr };
     });
   };
 
-  const handleArrayAdd = (field: string, template: any) => {
-    setResume((prev: any) => ({ ...prev, [field]: [...prev[field], template] }));
+  const handleArrayAdd = (
+    field: "education" | "experience",
+    template: any
+  ) => {
+    setResume((prev) => prev ? { ...prev, [field]: [...(prev[field] as any[]), template] } : prev);
   };
 
-  const handleArrayRemove = (field: string, idx: number) => {
-    setResume((prev: any) => {
-      const arr = [...prev[field]];
+  const handleArrayRemove = (field: "education" | "experience", idx: number) => {
+    setResume((prev) => {
+      if (!prev) return prev;
+      const arr = [...(prev[field] as any[])];
       arr.splice(idx, 1);
       return { ...prev, [field]: arr };
     });
   };
 
   const handleSkillChange = (idx: number, value: string) => {
-    setResume((prev: any) => {
+    setResume((prev) => {
+      if (!prev) return prev;
       const arr = [...prev.skills];
       arr[idx] = value;
       return { ...prev, skills: arr };
@@ -53,11 +65,12 @@ export default function ResumeManager({ password }: { password: string }) {
   };
 
   const handleSkillAdd = () => {
-    setResume((prev: any) => ({ ...prev, skills: [...prev.skills, ""] }));
+    setResume((prev) => prev ? { ...prev, skills: [...prev.skills, ""] } : prev);
   };
 
   const handleSkillRemove = (idx: number) => {
-    setResume((prev: any) => {
+    setResume((prev) => {
+      if (!prev) return prev;
       const arr = [...prev.skills];
       arr.splice(idx, 1);
       return { ...prev, skills: arr };
@@ -65,7 +78,8 @@ export default function ResumeManager({ password }: { password: string }) {
   };
 
   const handleCertChange = (idx: number, value: string) => {
-    setResume((prev: any) => {
+    setResume((prev) => {
+      if (!prev) return prev;
       const arr = [...prev.certifications];
       arr[idx] = value;
       return { ...prev, certifications: arr };
@@ -73,11 +87,12 @@ export default function ResumeManager({ password }: { password: string }) {
   };
 
   const handleCertAdd = () => {
-    setResume((prev: any) => ({ ...prev, certifications: [...prev.certifications, ""] }));
+    setResume((prev) => prev ? { ...prev, certifications: [...prev.certifications, ""] } : prev);
   };
 
   const handleCertRemove = (idx: number) => {
-    setResume((prev: any) => {
+    setResume((prev) => {
+      if (!prev) return prev;
       const arr = [...prev.certifications];
       arr.splice(idx, 1);
       return { ...prev, certifications: arr };
@@ -125,7 +140,7 @@ export default function ResumeManager({ password }: { password: string }) {
         <h3 className="font-semibold">Contact</h3>
         {Object.keys(resume.contact).map((key) => (
           <div key={key}>
-            <label>{key.charAt(0).toUpperCase() + key.slice(1)}: <input className="input" value={resume.contact[key]} onChange={e => handleContactChange(key, e.target.value)} /></label>
+            <label>{key.charAt(0).toUpperCase() + key.slice(1)}: <input className="input" value={resume.contact[key]} onChange={e => handleContactChange(key as keyof Resume["contact"], e.target.value)} /></label>
           </div>
         ))}
       </div>

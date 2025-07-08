@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   const body = await req.json();
   const skills = readSkills();
-  const idx = skills.findIndex((s: any) => s.id === body.id);
+  const idx = skills.findIndex((s: Skill) => s.id === body.id);
   if (idx !== -1) {
     skills[idx] = {
       ...skills[idx],

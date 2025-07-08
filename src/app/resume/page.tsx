@@ -1,4 +1,5 @@
 import React from "react";
+import type { Resume } from "../../types";
 
 async function getResume() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/resume`, { cache: 'no-store' });
@@ -7,7 +8,7 @@ async function getResume() {
 }
 
 export default async function ResumePage() {
-  const resume = await getResume();
+  const resume: Resume = await getResume();
   return (
     <main className="max-w-2xl mx-auto py-12 px-4">
       <h1 className="text-3xl font-bold mb-2">{resume.name}</h1>
@@ -27,7 +28,7 @@ export default async function ResumePage() {
       <section className="mb-6">
         <h3 className="font-semibold">Education</h3>
         <ul>
-          {resume.education.map((edu: any, i: number) => (
+          {resume.education.map((edu, i) => (
             <li key={i} className="mb-2">
               <span className="font-medium">{edu.degree}</span>, {edu.school} <span className="text-gray-500">({edu.year})</span>
             </li>
@@ -37,7 +38,7 @@ export default async function ResumePage() {
       <section className="mb-6">
         <h3 className="font-semibold">Experience</h3>
         <ul>
-          {resume.experience.map((exp: any, i: number) => (
+          {resume.experience.map((exp, i) => (
             <li key={i} className="mb-4">
               <div className="font-medium">{exp.role} at {exp.company} <span className="text-gray-500">({exp.year})</span></div>
               <div>{exp.description}</div>

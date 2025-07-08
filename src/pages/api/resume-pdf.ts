@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import type { Resume } from '../../src/types';
 import fs from 'fs/promises';
 import path from 'path';
 import PDFDocument from 'pdfkit';
@@ -7,7 +8,7 @@ const RESUME_PATH = path.join(process.cwd(), 'src/data/resume.json');
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const data = await fs.readFile(RESUME_PATH, 'utf-8');
-  const resume = JSON.parse(data);
+  const resume: Resume = JSON.parse(data);
 
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', 'attachment; filename="resume.pdf"');
@@ -28,13 +29,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   doc.moveDown();
 
   doc.fontSize(14).text('Education', { underline: true });
-  resume.education.forEach((edu: any) => {
+  resume.education.forEach((edu) => {
     doc.fontSize(12).text(`${edu.degree}, ${edu.school} (${edu.year})`);
   });
   doc.moveDown();
 
   doc.fontSize(14).text('Experience', { underline: true });
-  resume.experience.forEach((exp: any) => {
+  resume.experience.forEach((exp) => {
     doc.fontSize(12).text(`${exp.role} at ${exp.company} (${exp.year})`);
     doc.fontSize(11).text(exp.description, { indent: 20 });
     doc.moveDown(0.5);

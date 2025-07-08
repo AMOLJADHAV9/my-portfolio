@@ -16,6 +16,6 @@ export default function BackgroundHoverEffect() {
       document.body.removeEventListener('mousemove', addHover);
       document.body.removeEventListener('mouseout', removeHover);
     };
-  }, []);
+  }, []); 
   return null;
 } 

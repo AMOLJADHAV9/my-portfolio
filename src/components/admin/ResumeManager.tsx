@@ -33,7 +33,9 @@ export default function ResumeManager({ password }: { password: string }) {
   ) => {
     setResume((prev) => {
       if (!prev) return prev;
-      const arr = [...(prev[field] as any[])];
+      const arr = field === "education"
+        ? [...prev.education]
+        : [...prev.experience];
       arr[idx] = { ...arr[idx], [subfield]: value };
       return { ...prev, [field]: arr };
     });
@@ -41,15 +43,23 @@ export default function ResumeManager({ password }: { password: string }) {
 
   const handleArrayAdd = (
     field: "education" | "experience",
-    template: any
+    template: Resume["education"][0] | Resume["experience"][0]
   ) => {
-    setResume((prev) => prev ? { ...prev, [field]: [...(prev[field] as any[]), template] } : prev);
+    setResume((prev) => {
+      if (!prev) return prev;
+      const arr = field === "education"
+        ? [...prev.education]
+        : [...prev.experience];
+      return { ...prev, [field]: [...arr, template] };
+    });
   };
 
   const handleArrayRemove = (field: "education" | "experience", idx: number) => {
     setResume((prev) => {
       if (!prev) return prev;
-      const arr = [...(prev[field] as any[])];
+      const arr = field === "education"
+        ? [...prev.education]
+        : [...prev.experience];
       arr.splice(idx, 1);
       return { ...prev, [field]: arr };
     });
@@ -146,7 +156,7 @@ export default function ResumeManager({ password }: { password: string }) {
       </div>
       <div>
         <h3 className="font-semibold">Education</h3>
-        {resume.education.map((edu: any, i: number) => (
+        {resume.education.map((edu, i) => (
           <div key={i} className="border p-2 my-2">
             <label>Degree: <input className="input" value={edu.degree} onChange={e => handleArrayChange("education", i, "degree", e.target.value)} /></label><br/>
             <label>School: <input className="input" value={edu.school} onChange={e => handleArrayChange("education", i, "school", e.target.value)} /></label><br/>
@@ -158,7 +168,7 @@ export default function ResumeManager({ password }: { password: string }) {
       </div>
       <div>
         <h3 className="font-semibold">Experience</h3>
-        {resume.experience.map((exp: any, i: number) => (
+        {resume.experience.map((exp, i) => (
           <div key={i} className="border p-2 my-2">
             <label>Role: <input className="input" value={exp.role} onChange={e => handleArrayChange("experience", i, "role", e.target.value)} /></label><br/>
             <label>Company: <input className="input" value={exp.company} onChange={e => handleArrayChange("experience", i, "company", e.target.value)} /></label><br/>

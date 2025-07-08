@@ -5,9 +5,9 @@ import type { Skill } from "../../../types";
 
 const DATA_PATH = path.join(process.cwd(), 'src/data/skills.json');
 
-function readSkills() {
+function readSkills(): Skill[] {
   const data = fs.readFileSync(DATA_PATH, 'utf-8');
-  return JSON.parse(data);
+  return JSON.parse(data) as Skill[];
 }
 
 function writeSkills(skills: Skill[]) {

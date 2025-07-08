@@ -8,6 +8,7 @@ import { SiTypescript, SiNextdotjs, SiTailwindcss, SiFramer } from "react-icons/
 import { FaLaptopCode, FaMobileAlt, FaPalette } from "react-icons/fa";
 import { FaCode, FaPaintBrush, FaRocket } from "react-icons/fa";
 import FloatingNav from "../components/FloatingNav";
+import type { Project } from "../types";
 
 // Type definitions
 interface Project {
@@ -154,7 +155,7 @@ export default function Home() {
   const [modalProject, setModalProject] = useState<Project | null>(null);
   const [testimonialIdx, setTestimonialIdx] = useState(0);
   const [contactSuccess, setContactSuccess] = useState(false);
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
 
   // Animation controls for each section
@@ -171,7 +172,7 @@ export default function Home() {
       setLoadingProjects(true);
       const res = await fetch("/api/projects");
       const data = await res.json();
-      setProjects(data);
+      setProjects(data as Project[]);
       setLoadingProjects(false);
     }
     fetchProjects();

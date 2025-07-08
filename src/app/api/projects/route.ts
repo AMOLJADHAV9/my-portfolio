@@ -5,9 +5,9 @@ import type { Project } from "../../../types";
 
 const DATA_PATH = path.join(process.cwd(), 'src/data/projects.json');
 
-function readProjects() {
+function readProjects(): Project[] {
   const data = fs.readFileSync(DATA_PATH, 'utf-8');
-  return JSON.parse(data);
+  return JSON.parse(data) as Project[];
 }
 
 function writeProjects(projects: Project[]) {

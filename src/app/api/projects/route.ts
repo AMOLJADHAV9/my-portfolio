@@ -17,7 +17,7 @@ function writeProjects(projects: Project[]) {
 export async function GET() {
   let projects = readProjects();
   projects = projects.sort((a, b) => {
-    if (b.featured !== a.featured) return b.featured - a.featured;
+    if (b.featured !== a.featured) return Number(b.featured) - Number(a.featured);
     return (a.order ?? 0) - (b.order ?? 0);
   });
   return NextResponse.json(projects);

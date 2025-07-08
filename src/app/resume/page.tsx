@@ -1,5 +1,6 @@
 import React from "react";
 import type { Resume } from "../../types";
+import Link from "next/link";
 
 async function getResume() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/resume`, { cache: 'no-store' });
@@ -63,8 +64,8 @@ export default async function ResumePage() {
         </ul>
       </section>
       <div className="flex gap-4 mt-8">
-        <a href="/api/resume-pdf" className="btn btn-primary">Download as PDF</a>
-        <a href="/api/resume?download=json" className="btn btn-secondary">Download as JSON</a>
+        <Link href="/api/resume-pdf" className="btn btn-primary">Download as PDF</Link>
+        <Link href="/api/resume?download=json" className="btn btn-secondary">Download as JSON</Link>
       </div>
     </main>
   );

@@ -32,7 +32,6 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (authenticated) fetchProjects();
-    // eslint-disable-next-line
   }, [authenticated]);
 
   async function fetchProjects() {

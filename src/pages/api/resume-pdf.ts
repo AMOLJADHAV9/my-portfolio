@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { Resume } from '../../src/types';
+import type { Resume } from '../../types';
 import fs from 'fs/promises';
 import path from 'path';
 import PDFDocument from 'pdfkit';

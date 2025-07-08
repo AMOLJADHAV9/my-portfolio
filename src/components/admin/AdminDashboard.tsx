@@ -1,4 +1,4 @@
-import ResumeManager from "./ResumeManager";
+import { useState } from "react";
 
 const AdminDashboard = () => {
   const [tab, setTab] = useState("projects");

@@ -5,13 +5,14 @@ import { useAnimation } from "framer-motion";
 import { FaArrowDown, FaEnvelope, FaPhone, FaLinkedin, FaGithub } from "react-icons/fa6";
 import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs } from "react-icons/fa";
 import { SiTypescript, SiNextdotjs, SiTailwindcss, SiFramer } from "react-icons/si";
-import { FaLaptopCode, FaMobileAlt, FaPalette } from "react-icons/fa";
+import { FaMobileAlt } from "react-icons/fa";
 import { FaCode, FaPaintBrush, FaRocket } from "react-icons/fa";
 import FloatingNav from "../components/FloatingNav";
-import type { Project } from "../types";
+import Image from "next/image";
 
 // Type definitions
 interface Project {
+  id: string;
   title: string;
   description: string;
   tech: string[];
@@ -63,22 +64,26 @@ function useTypewriter(words: string[], speed = 80, pause = 1200) {
 
 function Counter({ label, value }: { label: string; value: number }) {
   const [count, setCount] = useState(0);
+  const startRef = useRef(0);
+
   useEffect(() => {
-    let start = 0;
+    startRef.current = 0;
+    setCount(0);
     const end = value;
-    if (count === end) return;
+    if (end === 0) return;
     const increment = end / 40;
     const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) {
+      startRef.current += increment;
+      if (startRef.current >= end) {
         setCount(end);
         clearInterval(timer);
       } else {
-        setCount(Math.ceil(start));
+        setCount(Math.ceil(startRef.current));
       }
     }, 24);
     return () => clearInterval(timer);
   }, [value]);
+
   return (
     <div className="flex flex-col items-center">
       <span className="text-3xl font-bold text-accent drop-shadow-lg">{count}+</span>
@@ -97,29 +102,6 @@ const skills = [
   { name: "Node.js", icon: <FaNodeJs />, level: 80 },
   { name: "Tailwind CSS", icon: <SiTailwindcss />, level: 88 },
   { name: "Framer Motion", icon: <SiFramer />, level: 80 },
-];
-
-const services = [
-  {
-    title: "Web Development",
-    description: "Building fast, modern, and responsive web apps with React, Next.js, and more.",
-    icon: <FaCode />,
-  },
-  {
-    title: "UI/UX Design",
-    description: "Designing beautiful, user-centric interfaces and experiences.",
-    icon: <FaPaintBrush />,
-  },
-  {
-    title: "Mobile Apps",
-    description: "Creating cross-platform mobile apps with React Native and Expo.",
-    icon: <FaMobileAlt />,
-  },
-  {
-    title: "Performance & SEO",
-    description: "Optimizing sites for speed, accessibility, and search engines.",
-    icon: <FaRocket />,
-  },
 ];
 
 const testimonials = [
@@ -146,7 +128,7 @@ const testimonials = [
 // Section animation variants
 const sectionVariants = {
   hidden: { opacity: 0, y: 48 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.9 } },
 };
 
 export default function Home() {
@@ -253,7 +235,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.4 }}
             >
-              Hi, I'm Amol Jadhav
+              Hi, I&apos;m Amol Jadhav
             </motion.h1>
             <motion.h2
               className="text-xl sm:text-3xl font-medium text-white text-glow bg-glass px-4 py-2 rounded-xl shadow-glass backdrop-blur-xs"
@@ -300,7 +282,7 @@ export default function Home() {
                 whileHover={{ scale: 1.07 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Let's Talk
+                Let&apos;s Talk
               </motion.a>
               <motion.a
                 href="/api/resume-pdf"
@@ -344,9 +326,11 @@ export default function Home() {
             whileHover={{ rotate: 4, scale: 1.04 }}
             transition={{ type: "spring", stiffness: 200, damping: 12 }}
           >
-            <img
+            <Image
               src="/profile/photo.jpg"
               alt="Amol Jadhav photo"
+              width={224}
+              height={224}
               className="w-full h-full object-cover"
             />
           </motion.div>
@@ -375,7 +359,7 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              I'm a creative developer with a background in Computer Science and a passion for blending design and technology. My journey began at a young age, and since then, I've worked with startups, agencies, and global clients to deliver impactful digital solutions. I believe in continuous learning, collaboration, and building products that make a difference.
+              I&apos;m a creative developer with a background in Computer Science and a passion for blending design and technology. My journey began at a young age, and since then, I&apos;ve worked with startups, agencies, and global clients to deliver impactful digital solutions. I believe in continuous learning, collaboration, and building products that make a difference.
             </motion.p>
             <ul className="list-disc pl-6 text-foreground/70 text-base">
               <li>🎓 B.Tech in Computer Science</li>
@@ -549,13 +533,26 @@ export default function Home() {
                 <div className="bg-glass rounded-2xl shadow-glass p-8 flex flex-col md:flex-row items-center gap-8 border-l-4 border-accent mb-8">
                   <div className="flex-shrink-0 text-6xl text-accent">💻</div>
                   <div>
-                    <h4 className="text-2xl font-bold text-accent mb-2">{projects[0].title} <span className="ml-2 px-2 py-1 text-xs bg-accent/20 text-accent rounded">Featured</span></h4>
-                    <p className="text-foreground/80 mb-2">{projects[0].description}</p>
-                    <ul className="flex flex-wrap gap-2 mb-2">
-                      {projects[0].tech && projects[0].tech.split ? projects[0].tech.split(",").map((t: string) => (
-                        <li key={t} className="bg-accent/10 text-accent text-xs px-2 py-1 rounded-full">{t.trim()}</li>
-                      )) : null}
-                    </ul>
+                    {(() => {
+                      const { title, description, tech } = projects[0] as { title: string; description: string; tech: string | string[] };
+                      return (
+                        <>
+                          <h4 className="text-2xl font-bold text-accent mb-2">{title} <span className="ml-2 px-2 py-1 text-xs bg-accent/20 text-accent rounded">Featured</span></h4>
+                          <p className="text-foreground/80 mb-2">{description}</p>
+                          <ul className="flex flex-wrap gap-2 mb-2">
+                            {typeof tech === "string"
+                              ? tech.split(",").map((t: string) => (
+                                  <li key={t} className="bg-accent/10 text-accent text-xs px-2 py-1 rounded-full">{t.trim()}</li>
+                                ))
+                              : Array.isArray(tech)
+                              ? tech.map((t: string) => (
+                                  <li key={t} className="bg-accent/10 text-accent text-xs px-2 py-1 rounded-full">{t.trim()}</li>
+                                ))
+                              : null}
+                          </ul>
+                        </>
+                      );
+                    })()}
                     <div className="flex gap-3 mt-2">
                       <a href={projects[0].live} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full bg-accent text-background font-semibold shadow-glass hover:bg-accent-dark transition-colors text-sm">Live Preview</a>
                       <a href={projects[0].github} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-full border border-accent text-accent font-semibold bg-glass hover:bg-accent hover:text-background transition-colors text-sm">GitHub</a>
@@ -573,7 +570,7 @@ export default function Home() {
                   visible: { transition: { staggerChildren: 0.15 } },
                 }}
               >
-                {projects.slice(1).map((project, idx) => (
+                {projects.slice(1).map((project) => (
                   <motion.div
                     key={project.id}
                     className="relative bg-glass rounded-2xl shadow-glass overflow-hidden group cursor-pointer flex flex-col min-h-[320px]"
@@ -591,9 +588,15 @@ export default function Home() {
                       <h4 className="text-xl font-bold mb-2 text-accent">{project.title}</h4>
                       <p className="text-foreground/80 mb-4 flex-1">{project.description}</p>
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {project.tech && project.tech.split ? project.tech.split(",").map((t: string) => (
-                          <span key={t} className="bg-accent/10 text-accent text-xs px-2 py-1 rounded-full">{t.trim()}</span>
-                        )) : null}
+                        {typeof project.tech === "string"
+                          ? (project.tech as string).split(",").map((t: string) => (
+                              <span key={t} className="bg-accent/10 text-accent text-xs px-2 py-1 rounded-full">{t.trim()}</span>
+                            ))
+                          : Array.isArray(project.tech)
+                          ? (project.tech as string[]).map((t: string) => (
+                              <span key={t} className="bg-accent/10 text-accent text-xs px-2 py-1 rounded-full">{t.trim()}</span>
+                            ))
+                          : null}
                       </div>
                       <div className="flex gap-3 mt-auto">
                         <a
@@ -816,12 +819,14 @@ export default function Home() {
                 transition={{ duration: 0.5 }}
                 layout
               >
-                <img
+                <Image
                   src={testimonials[testimonialIdx].avatar}
                   alt={testimonials[testimonialIdx].name}
+                  width={64}
+                  height={64}
                   className="w-16 h-16 rounded-full object-cover border-4 border-accent mb-2"
                 />
-                <p className="text-lg text-foreground/80 text-center">"{testimonials[testimonialIdx].quote}"</p>
+                <p className="text-lg text-foreground/80 text-center">&quot;{testimonials[testimonialIdx].quote}&quot;</p>
                 <span className="text-accent font-bold mt-2">{testimonials[testimonialIdx].name}</span>
                 <span className="text-xs text-foreground/60">{testimonials[testimonialIdx].role}</span>
               </motion.div>
@@ -869,11 +874,11 @@ export default function Home() {
             Contact Me
           </motion.h3>
           <div className="mb-6 text-lg text-foreground/80 text-center max-w-xl">
-            <p>Have a project in mind, want to collaborate, or just want to say hello? I'd love to hear from you! Fill out the form below or reach out via email or LinkedIn. I respond within 24 hours.</p>
+            <p>Have a project in mind, want to collaborate, or just want to say hello? I&apos;d love to hear from you! Fill out the form below or reach out via email or LinkedIn. I respond within 24 hours.</p>
           </div>
           {contactSuccess ? (
             <div className="bg-glass rounded-2xl shadow-glass p-8 text-center text-accent text-xl font-semibold">
-              Thank you! Your message has been sent. I'll get back to you soon.
+              Thank you! Your message has been sent. I&apos;ll get back to you soon.
             </div>
           ) : (
             <form

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import type { Resume } from "../../types";
 
 export default function ResumeManager({ password }: { password: string }) {
@@ -148,9 +148,9 @@ export default function ResumeManager({ password }: { password: string }) {
       </div>
       <div>
         <h3 className="font-semibold">Contact</h3>
-        {Object.keys(resume.contact).map((key) => (
+        {(Object.keys(resume.contact) as (keyof Resume["contact"])[]).map((key) => (
           <div key={key}>
-            <label>{key.charAt(0).toUpperCase() + key.slice(1)}: <input className="input" value={resume.contact[key]} onChange={e => handleContactChange(key as keyof Resume["contact"], e.target.value)} /></label>
+            <label>{key.charAt(0).toUpperCase() + key.slice(1)}: <input className="input" value={resume.contact[key]} onChange={e => handleContactChange(key, e.target.value)} /></label>
           </div>
         ))}
       </div>

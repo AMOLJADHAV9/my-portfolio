@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.setHeader('Content-Disposition', 'attachment; filename="resume.json"');
         res.status(200).send(data);
         return;
-      } catch (err) {
+      } catch {
         res.status(500).json({ error: 'Failed to download resume.' });
         return;
       }
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const data = await fs.readFile(RESUME_PATH, 'utf-8');
       res.status(200).json(JSON.parse(data));
-    } catch (err) {
+    } catch {
       res.status(500).json({ error: 'Failed to load resume.' });
     }
   } else if (req.method === 'POST') {
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       await fs.writeFile(RESUME_PATH, JSON.stringify(resume, null, 2));
       res.status(200).json({ success: true });
-    } catch (err) {
+    } catch {
       res.status(500).json({ error: 'Failed to save resume.' });
     }
   } else {

@@ -20,7 +20,68 @@
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  background-attachment: fixed;
+  position: relative;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Enable scroll snap for main vertical sections */
+html, body {
+  scroll-behavior: smooth;
+}
+
+.snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.bg-blur-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  /* Dark theme gradient with modern mesh pattern overlay */
+  background:
+    linear-gradient(135deg, #0f172a 0%, #334155 100%),
+    url('data:image/svg+xml;utf8,<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 60 Q30 0 60 60 T120 60" stroke="white" stroke-width="1.5" stroke-opacity="0.08" fill="none"/><path d="M0 90 Q30 30 60 90 T120 90" stroke="white" stroke-width="1.5" stroke-opacity="0.08" fill="none"/><path d="M0 30 Q30 90 60 30 T120 30" stroke="white" stroke-width="1.5" stroke-opacity="0.08" fill="none"/></svg>');
+  background-blend-mode: overlay;
+  background-size: cover, 120px 120px;
+  opacity: 0.95;
+  transition: background 0.5s, opacity 0.3s;
+}
+.bg-blur-overlay.hovered-bg {
+  /* On hover: brighten pattern and shift gradient */
+  background:
+    linear-gradient(120deg, #1e293b 0%, #334155 100%),
+    url('data:image/svg+xml;utf8,<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 60 Q30 0 60 60 T120 60" stroke="white" stroke-width="1.5" stroke-opacity="0.18" fill="none"/><path d="M0 90 Q30 30 60 90 T120 90" stroke="white" stroke-width="1.5" stroke-opacity="0.18" fill="none"/><path d="M0 30 Q30 90 60 30 T120 30" stroke="white" stroke-width="1.5" stroke-opacity="0.18" fill="none"/></svg>');
+  opacity: 1;
+}
+
+/* Theme gradients for switching */
+.theme-blue    { background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%); }
+.theme-purple  { background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%); }
+.theme-green   { background: linear-gradient(135deg, #34d399 0%, #60a5fa 100%); }
+.theme-sunset  { background: linear-gradient(135deg, #fbbf24 0%, #f472b6 100%); }
+.theme-dark    { background: linear-gradient(135deg, #0f172a 0%, #334155 100%); }
+
+/* Text Glow Utility */
+.text-glow {
+  text-shadow:
+    0 0 8px #fff,
+    0 0 16px #38bdf8,
+    0 0 32px #38bdf8,
+    0 0 48px #0ea5e9;
+}
+
+/* Ensure white text utility (for custom use) */
+.text-white {
+  color: #fff !important;
 }

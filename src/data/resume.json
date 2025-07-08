@@ -1,0 +1,41 @@
+{
+  "name": "Amol [Your Last Name]",
+  "title": "Full Stack Developer",
+  "summary": "Innovative and detail-oriented Full Stack Developer with 4+ years of experience building modern web applications using React, Next.js, Node.js, and Tailwind CSS. Passionate about UI/UX, performance, and delivering business value.",
+  "contact": {
+    "email": "amol@example.com",
+    "phone": "+91-12345-67890",
+    "location": "Pune, India",
+    "website": "https://amol-portfolio.com",
+    "linkedin": "https://linkedin.com/in/amol",
+    "github": "https://github.com/amol"
+  },
+  "education": [
+    {
+      "degree": "B.Tech in Computer Science",
+      "school": "Savitribai Phule Pune University",
+      "year": "2018 - 2022"
+    }
+  ],
+  "experience": [
+    {
+      "role": "Frontend Developer",
+      "company": "Tech Solutions Pvt Ltd",
+      "year": "2022 - Present",
+      "description": "Developed and maintained scalable web applications using React, Next.js, and Tailwind CSS. Collaborated with designers and backend teams to deliver seamless user experiences."
+    },
+    {
+      "role": "Web Developer Intern",
+      "company": "Innovatech",
+      "year": "2021 - 2022",
+      "description": "Built responsive landing pages and dashboards. Automated workflows and improved site performance."
+    }
+  ],
+  "skills": [
+    "React.js", "Next.js", "TypeScript", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "Framer Motion", "Git", "REST APIs"
+  ],
+  "certifications": [
+    "Certified React Developer – Coursera (2021)",
+    "JavaScript Algorithms and Data Structures – freeCodeCamp (2020)"
+  ]
+} 
